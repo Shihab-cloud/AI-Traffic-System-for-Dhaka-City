@@ -1,0 +1,28 @@
+export enum SupportTicketStatusEnum {
+  SUBMITTED = 'SUBMITTED',
+  IN_REVIEW = 'IN_REVIEW',
+  RESOLVED = 'RESOLVED',
+}
+
+export enum SupportTicketCategoryEnum {
+  ACCOUNT_ACCESS = 'ACCOUNT_ACCESS',
+  BILLING = 'BILLING',
+  TECHNICAL = 'TECHNICAL',
+  GENERAL = 'GENERAL',
+  OTHER = 'OTHER',
+}
+
+export enum SupportTicketPriorityEnum {
+  LOW = 'LOW',
+  MEDIUM = 'MEDIUM',
+  HIGH = 'HIGH',
+  CRITICAL = 'CRITICAL',
+}
+
+export enum SupportTicketLogTypeEnum {
+  TICKET_CREATED = 'TICKET_CREATED',
+  STATUS_CHANGED = 'STATUS_CHANGED',
+  PRIORITY_CHANGED = 'PRIORITY_CHANGED',
+  ASSIGNED_TO_CHANGED = 'ASSIGNED_TO_CHANGED',
+  MESSAGE_ADDED = 'MESSAGE_ADDED',
+}

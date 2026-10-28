@@ -1,0 +1,9 @@
+{
+  "identities": [
+    {
+      "name": "dhaka-traffic",
+      "credentials": [{ "accessKey": "local-dev-access-key", "secretKey": "local-dev-secret-key" }],
+      "actions": ["Admin", "Read", "List", "Tagging", "Write"]
+    }
+  ]
+}

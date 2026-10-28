@@ -1,0 +1,108 @@
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Verify your email</title>
+    <style>
+      * {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+      }
+
+      body {
+        font-family: Arial, sans-serif;
+        color: #111722;
+        line-height: 1.5;
+      }
+
+      .container {
+        max-width: 600px;
+        margin: 20px auto;
+        background-color: #ffffff;
+        border-radius: 10px;
+        border: 1px solid #e0e0e0;
+        overflow: hidden;
+      }
+
+      .logo {
+        font-size: 28px;
+        color: #111722;
+        text-align: center;
+        padding: 30px;
+      }
+
+      .heading {
+        font-size: 20px;
+        color: #ffffff;
+        text-align: center;
+        background-color: #111722;
+        padding: 20px;
+      }
+
+      .content {
+        padding: 26px 40px;
+      }
+
+      p {
+        margin: 16px 0;
+        font-size: medium;
+      }
+
+      .btn {
+        font-size: medium;
+        display: inline-block;
+        padding: 12px 40px;
+        background-color: #111722;
+        color: #ffffff !important;
+        text-decoration: none;
+        border-radius: 4px;
+        margin: 8px auto;
+        text-align: center;
+      }
+
+      strong {
+        color: #111722;
+      }
+
+      hr {
+        margin: 0;
+        border: 0;
+        border-top: 1px solid #e0e0e0;
+      }
+
+      .footer {
+        font-weight: normal;
+        color: #5d636f;
+        font-style: italic;
+        text-align: center;
+        padding: 20px;
+        background-color: #f8f8f8;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <h2 class="logo"><%= appName %></h2>
+      <h4 class="heading">Verify your email</h4>
+      <div class="content">
+        <p>Hello,</p>
+        <p>
+          You added this email to your <strong><%= appName %></strong> account.
+          Click the button below to confirm you own this inbox &mdash; this enables
+          password recovery if you ever lose access.
+        </p>
+        <a href="<%= verifyUrl %>" class="btn">Verify email</a>
+        <p>This link will be valid for the next <%= linkExpiry %>.</p>
+      </div>
+      <hr />
+      <div class="footer">
+        <p>
+          If you did not expect this email, you can safely ignore it.
+        </p>
+        <p>&copy; <%= appName %> | All Rights Reserved</p>
+      </div>
+    </div>
+  </body>
+</html>

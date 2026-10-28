@@ -1,0 +1,34 @@
+{
+  "name": "dhaka-traffic",
+  "version": "1.0.0",
+  "description": "Full-stack SaaS starter template — Next.js frontend with two interchangeable NestJS backends (Drizzle/Postgres or Mongoose/MongoDB).",
+  "main": "index.js",
+  "scripts": {
+    "dev:fe": "pnpm --filter @dhaka-traffic/frontend dev",
+    "dev:be": "pnpm --filter @dhaka-traffic/backend dev",
+    "dev": "concurrently -n fe,be -c blue,green \"pnpm dev:fe\" \"pnpm dev:be\"",
+    "build": "pnpm -r run build",
+    "type-check": "pnpm -r run type-check",
+    "format": "prettier --write .",
+    "format:check": "prettier --check .",
+    "test": "pnpm -r run test",
+    "lint:check": "pnpm -r run lint:check"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/pigeonprojectdev/web-template.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/pigeonprojectdev/web-template/issues"
+  },
+  "homepage": "https://github.com/pigeonprojectdev/web-template#readme",
+  "private": true,
+  "devDependencies": {
+    "concurrently": "^10.0.3",
+    "prettier": "^3.9.5",
+    "prettier-plugin-tailwindcss": "^0.8.1"
+  }
+}

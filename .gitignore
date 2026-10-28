@@ -1,0 +1,47 @@
+node_modules
+dist
+.next
+*.tsbuildinfo
+__pycache__/
+*.pyc
+logs/
+*.log
+
+# Settings files hold secrets: only the *.example templates are tracked
+.env
+.env.*
+!.env.example
+
+# Keys and certificates
+*.pem
+*.key
+*.p12
+*.pfx
+id_rsa*
+id_ed25519*
+
+# Local runtime data (databases, uploads, runs), portable tools and the Python venv (see infra/, start-all.ps1)
+.data/
+.tools/
+.venv/
+vision/data/
+
+# Model weights that are downloaded separately (see README); only our own models are tracked
+vision/models/*
+!vision/models/bd_vehicles_best.pt
+!vision/models/helmet_cls.pt
+!vision/models/plate_models/
+vision/models/plate_models/*
+!vision/models/plate_models/bd_plate_ocr_v2_best.pt
+
+# Editor and assistant files
+.claude/
+CLAUDE.md
+.cursor/
+.agents/
+.vscode/
+.idea/
+*.code-workspace
+test-results/
+playwright-report/
+coverage/

@@ -1,0 +1,26 @@
+packages:
+  - 'apps/*'
+  - 'packages/*'
+
+# Collapse the stray zod v4 copy so @hookform/resolvers + form schemas share one
+# zod identity (the verified 4.3.6). Leaves zod v3 transitive deps untouched.
+# mongodb pinned to mongoose 9's driver range (~7.2) so the app, mongoose, and
+# @better-auth/mongo-adapter share one Db/MongoClient type identity.
+overrides:
+  zod@4.4.3: 4.3.6
+  mongodb: ~7.2.0
+
+# Native/postinstall build scripts allowed to run (both backends + frontend toolchain)
+onlyBuiltDependencies:
+  - '@firebase/util'
+  - '@nestjs/core'
+  - '@scarf/scarf'
+  - '@swc/core'
+  - bcrypt
+  - cpu-features
+  - esbuild
+  - msgpackr-extract
+  - protobufjs
+  - sharp
+  - ssh2
+  - unrs-resolver

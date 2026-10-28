@@ -1,0 +1,16 @@
+@import 'tailwindcss';
+@import 'tw-animate-css';
+@import './scrollbar.css';
+
+/*
+ * `max-w-8xl` is used by the page shells but is not a Tailwind v4 default —
+ * without this the class silently did nothing and those containers had no
+ * width cap at all. 90rem continues the scale (7xl = 80rem).
+ */
+@theme {
+  --container-8xl: 90rem;
+}
+
+body {
+  overflow-x: hidden;
+}

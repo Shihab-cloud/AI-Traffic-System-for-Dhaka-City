@@ -1,0 +1,7 @@
+export enum UserStatusEnum {
+  PASSWORD_MISSING = 'PASSWORD_MISSING',
+  ACTIVE = 'ACTIVE',
+  BANNED = 'BANNED',
+  INACTIVE = 'INACTIVE',
+  INVITED = 'INVITED',
+}

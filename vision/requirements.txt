@@ -1,0 +1,12 @@
+# Vision service (on top of the project's CUDA PyTorch + ultralytics 8.4 venv)
+ultralytics>=8.4
+opencv-python
+numpy
+fastapi>=0.110
+uvicorn>=0.29
+boto3
+requests
+# Violation explanations (service/vlm.py): local Qwen3.5-2B in 4-bit
+transformers>=5.20
+accelerate
+bitsandbytes

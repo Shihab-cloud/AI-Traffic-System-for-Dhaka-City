@@ -1,0 +1,1146 @@
+/* ============================================================
+   Dhaka Traffic — public home page. Self-contained tokens scoped to .page.
+   Direction: calm civic blue with road-sign amber; the hero is a live
+   camera view (fixed dark palette in both themes, like a real feed) where
+   every vehicle is tracked and two get flagged.
+   ============================================================ */
+
+.page {
+  --ink: #0d1a2b;
+  --ink-soft: #4b5b70;
+  --bg: #f5f7fa;
+  --bg-2: #edf1f6;
+  --surface: #ffffff;
+  --line: rgba(13, 26, 43, 0.1);
+  --line-strong: rgba(13, 26, 43, 0.2);
+  --brand: #1d4ed8;
+  --brand-btn: #1d4ed8;
+  --brand-btn-hover: #1e40af;
+  --brand-soft: rgba(29, 78, 216, 0.1);
+  --accent-text: #1d4ed8;
+  --amber: #f5a524;
+  --amber-soft: rgba(245, 165, 36, 0.16);
+  --amber-deep: #a35f00;
+  --green: #15803d;
+  --green-soft: rgba(22, 163, 74, 0.12);
+  --red: #e5484d;
+  --shadow: rgba(15, 30, 60, 0.08);
+  --shadow-strong: rgba(15, 30, 60, 0.28);
+  --grid: rgba(13, 26, 43, 0.05);
+
+  /* camera feed: the same in both themes */
+  --feed-bg: #0a111d;
+  --feed-sidewalk: #182031;
+  --feed-asphalt: #232d3e;
+  --feed-lane: rgba(255, 255, 255, 0.5);
+  --feed-median: #f2c14e;
+  --feed-zone: #5ab0ff;
+  --det: #36d399;
+  --viol: #ff4d4f;
+
+  font-family: var(--traffic-body), system-ui, sans-serif;
+  color: var(--ink);
+  background: var(--bg);
+  overflow-x: clip;
+  -webkit-font-smoothing: antialiased;
+}
+
+.page[data-theme='dark'] {
+  --ink: #e7edf6;
+  --ink-soft: #9ba9bd;
+  --bg: #0a101c;
+  --bg-2: #0f1726;
+  --surface: #121c2e;
+  --line: rgba(255, 255, 255, 0.09);
+  --line-strong: rgba(255, 255, 255, 0.18);
+  --brand: #6b93ff;
+  --brand-btn: #3563e9;
+  --brand-btn-hover: #2b55d6;
+  --brand-soft: rgba(107, 147, 255, 0.15);
+  --accent-text: #8fb0ff;
+  --amber-soft: rgba(245, 165, 36, 0.18);
+  --amber-deep: #f5b84a;
+  --green: #3fcf7f;
+  --green-soft: rgba(63, 207, 127, 0.14);
+  --shadow: rgba(0, 0, 0, 0.35);
+  --shadow-strong: rgba(0, 0, 0, 0.6);
+  --grid: rgba(255, 255, 255, 0.04);
+}
+
+.page *,
+.page *::before,
+.page *::after {
+  box-sizing: border-box;
+}
+
+.display {
+  font-family: var(--traffic-display), system-ui, sans-serif;
+  letter-spacing: -0.02em;
+}
+
+.shell {
+  width: min(1180px, 100% - 2.5rem);
+  margin-inline: auto;
+}
+
+/* ---------------- Buttons ---------------- */
+
+.btnPrimary,
+.btnGhost,
+.btnLight,
+.btnOutlineLight {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  padding: 0.6rem 1.05rem;
+  border-radius: 10px;
+  border: 1px solid transparent;
+  font-weight: 600;
+  font-size: 0.95rem;
+  line-height: 1.2;
+  text-decoration: none;
+  white-space: nowrap;
+  cursor: pointer;
+  transition:
+    background-color 0.18s ease,
+    border-color 0.18s ease,
+    transform 0.18s ease;
+}
+
+.btnPrimary {
+  background: var(--brand-btn);
+  color: #fff;
+}
+
+.btnPrimary:hover {
+  background: var(--brand-btn-hover);
+}
+
+.btnGhost {
+  color: var(--ink);
+  border-color: var(--line-strong);
+  background: transparent;
+}
+
+.btnGhost:hover {
+  background: var(--surface);
+}
+
+.btnLight {
+  background: #fff;
+  color: #0d1b33;
+}
+
+.btnLight:hover {
+  background: #e8eefc;
+}
+
+.btnOutlineLight {
+  color: #fff;
+  border-color: rgba(255, 255, 255, 0.45);
+}
+
+.btnOutlineLight:hover {
+  background: rgba(255, 255, 255, 0.1);
+}
+
+.btnLarge {
+  padding: 0.85rem 1.35rem;
+  font-size: 1.02rem;
+}
+
+.btnPrimary:focus-visible,
+.btnGhost:focus-visible,
+.btnLight:focus-visible,
+.btnOutlineLight:focus-visible,
+.iconButton:focus-visible,
+.navLinks a:focus-visible {
+  outline: 2px solid var(--brand);
+  outline-offset: 2px;
+}
+
+/* ---------------- Nav ---------------- */
+
+.nav {
+  position: sticky;
+  top: 0;
+  z-index: 50;
+  background: color-mix(in srgb, var(--bg) 84%, transparent);
+  backdrop-filter: blur(12px);
+  border-bottom: 1px solid var(--line);
+}
+
+.navInner {
+  display: flex;
+  align-items: center;
+  gap: 2rem;
+  height: 68px;
+}
+
+.brand {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.6rem;
+  font-family: var(--traffic-display), system-ui, sans-serif;
+  font-weight: 700;
+  font-size: 1.15rem;
+  color: var(--ink);
+  text-decoration: none;
+}
+
+.brandMark {
+  display: grid;
+  place-items: center;
+  width: 32px;
+  height: 32px;
+  border-radius: 9px;
+  background: var(--amber);
+  color: #1a1405;
+}
+
+.navLinks {
+  display: flex;
+  gap: 1.75rem;
+  flex: 1;
+  justify-content: center;
+}
+
+.navLinks a {
+  color: var(--ink-soft);
+  text-decoration: none;
+  font-weight: 500;
+  font-size: 0.95rem;
+}
+
+.navLinks a:hover {
+  color: var(--ink);
+}
+
+.navActions {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+}
+
+.iconButton {
+  display: grid;
+  place-items: center;
+  width: 38px;
+  height: 38px;
+  border-radius: 10px;
+  border: 1px solid var(--line-strong);
+  background: transparent;
+  color: var(--ink);
+  cursor: pointer;
+}
+
+.iconButton:hover {
+  background: var(--surface);
+}
+
+/* ---------------- Hero ---------------- */
+
+.hero {
+  position: relative;
+  padding: 4.5rem 0 5.5rem;
+}
+
+.hero::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background-image:
+    radial-gradient(40rem 26rem at 78% 20%, var(--brand-soft), transparent 70%),
+    linear-gradient(var(--grid) 1px, transparent 1px),
+    linear-gradient(90deg, var(--grid) 1px, transparent 1px);
+  background-size:
+    auto,
+    48px 48px,
+    48px 48px;
+  mask-image: radial-gradient(ellipse 80% 70% at 60% 30%, #000 40%, transparent 85%);
+  pointer-events: none;
+}
+
+.heroGrid {
+  position: relative;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1.1fr);
+  gap: 3.5rem;
+  align-items: center;
+}
+
+.eyebrow {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.55rem;
+  padding: 0.4rem 0.85rem;
+  border: 1px solid var(--line-strong);
+  border-radius: 999px;
+  background: var(--surface);
+  font-family: var(--traffic-mono), monospace;
+  font-size: 0.74rem;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--accent-text);
+}
+
+.eyebrowDot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--red);
+  box-shadow: 0 0 0 3px rgba(229, 72, 77, 0.18);
+}
+
+.heroTitle {
+  margin: 1.4rem 0 0;
+  font-size: clamp(2.5rem, 4.6vw, 4.05rem);
+  font-weight: 700;
+  line-height: 1.05;
+  letter-spacing: -0.03em;
+}
+
+.accent {
+  position: relative;
+  display: inline-block;
+  color: var(--brand);
+}
+
+/* Dashed road marking under the key word */
+.marking {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: -0.04em;
+  height: 0.11em;
+  border-radius: 2px;
+  background: repeating-linear-gradient(90deg, var(--amber) 0 22px, transparent 22px 32px);
+}
+
+.heroLede {
+  margin: 1.4rem 0 2rem;
+  max-width: 34rem;
+  font-size: 1.12rem;
+  line-height: 1.65;
+  color: var(--ink-soft);
+}
+
+.heroActions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.8rem;
+}
+
+.heroNote {
+  margin: 1.1rem 0 0;
+  font-size: 0.88rem;
+  color: var(--ink-soft);
+}
+
+/* ---------------- Camera feed ---------------- */
+
+.feed {
+  position: relative;
+  border-radius: 18px;
+  box-shadow:
+    0 40px 80px -40px var(--shadow-strong),
+    0 0 0 1px var(--line);
+}
+
+.feedSvg {
+  display: block;
+  width: 100%;
+  height: auto;
+  border-radius: 18px;
+  overflow: hidden;
+}
+
+.feedBg {
+  fill: var(--feed-bg);
+}
+
+.sidewalk {
+  fill: var(--feed-sidewalk);
+}
+
+.asphalt {
+  fill: var(--feed-asphalt);
+}
+
+.laneDash {
+  stroke: var(--feed-lane);
+  stroke-width: 1.6;
+  stroke-dasharray: 12 16;
+}
+
+.median {
+  stroke: var(--feed-median);
+  stroke-width: 1.6;
+}
+
+.zone {
+  fill: rgba(90, 176, 255, 0.07);
+  stroke: var(--feed-zone);
+  stroke-width: 1.4;
+  stroke-dasharray: 6 5;
+}
+
+.zoneText {
+  fill: #a9d4ff;
+  font-family: var(--traffic-mono), monospace;
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+}
+
+.box {
+  fill: none;
+  stroke: var(--det);
+  stroke-width: 2;
+  vector-effect: non-scaling-stroke;
+}
+
+.labelOk rect {
+  fill: var(--det);
+}
+
+.labelOk text,
+.labelViolation text {
+  font-family: var(--traffic-mono), monospace;
+  font-size: 10.5px;
+  font-weight: 600;
+}
+
+.labelOk text {
+  fill: #04210f;
+}
+
+.labelViolation {
+  display: none;
+}
+
+.labelViolation rect {
+  fill: var(--viol);
+}
+
+.labelViolation text {
+  fill: #fff;
+}
+
+.vehicle[data-state='violation'] .box {
+  stroke: var(--viol);
+  stroke-width: 2.6;
+}
+
+.vehicle[data-state='violation'] .labelOk {
+  display: none;
+}
+
+.vehicle[data-state='violation'] .labelViolation {
+  display: inline;
+}
+
+.hud {
+  position: absolute;
+  top: 12px;
+  left: 12px;
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  padding: 0.3rem 0.55rem;
+  border-radius: 6px;
+  background: rgba(5, 10, 18, 0.62);
+  color: rgba(255, 255, 255, 0.86);
+  font-family: var(--traffic-mono), monospace;
+  font-size: 0.68rem;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+}
+
+.hudRight {
+  left: auto;
+  right: 12px;
+}
+
+.rec {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  color: #ff8a8a;
+}
+
+.recDot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: #ff4d4f;
+  animation: recBlink 1.4s steps(2, start) infinite;
+}
+
+@keyframes recBlink {
+  to {
+    visibility: hidden;
+  }
+}
+
+.legend {
+  position: absolute;
+  left: 12px;
+  bottom: 12px;
+  display: flex;
+  gap: 0.8rem;
+  padding: 0.3rem 0.55rem;
+  border-radius: 6px;
+  background: rgba(5, 10, 18, 0.62);
+  color: rgba(255, 255, 255, 0.8);
+  font-family: var(--traffic-mono), monospace;
+  font-size: 0.66rem;
+}
+
+.legend span {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+}
+
+.legend i {
+  width: 10px;
+  height: 10px;
+  border-radius: 2px;
+  border: 2px solid;
+}
+
+.legendOk {
+  border-color: var(--det) !important;
+}
+
+.legendViolation {
+  border-color: var(--viol) !important;
+}
+
+/* The two case cards share one spot: the second lies over the first. */
+.cases {
+  position: absolute;
+  right: -24px;
+  bottom: -64px;
+  width: min(310px, 80%);
+}
+
+.caseCard {
+  position: relative;
+  display: flex;
+  align-items: flex-start;
+  gap: 0.75rem;
+  padding: 0.85rem 1rem;
+  border-radius: 14px;
+  border: 1px solid var(--line);
+  background: var(--surface);
+  box-shadow: 0 24px 50px -24px var(--shadow-strong);
+}
+
+.caseCard + .caseCard {
+  position: absolute;
+  inset: 0;
+}
+
+.caseHidden {
+  display: none;
+}
+
+.caseIcon {
+  flex: none;
+  display: grid;
+  place-items: center;
+  width: 36px;
+  height: 36px;
+  border-radius: 10px;
+  background: rgba(229, 72, 77, 0.12);
+  color: var(--red);
+}
+
+.caseTitle,
+.caseText,
+.caseMeta {
+  display: block;
+}
+
+.caseTitle {
+  font-weight: 600;
+  font-size: 0.92rem;
+}
+
+.caseText {
+  margin-top: 0.1rem;
+  font-size: 0.86rem;
+  color: var(--ink-soft);
+}
+
+.caseMeta {
+  margin-top: 0.35rem;
+  font-family: var(--traffic-mono), monospace;
+  font-size: 0.68rem;
+  color: var(--green);
+}
+
+/* ---------------- Facts ---------------- */
+
+.facts {
+  position: relative;
+  padding: 0.5rem 0 1rem;
+}
+
+.factsGrid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 1px;
+  background: var(--line);
+  border: 1px solid var(--line);
+  border-radius: 16px;
+  overflow: hidden;
+}
+
+.fact {
+  padding: 1.4rem 1.5rem;
+  background: var(--surface);
+}
+
+.factValue {
+  font-size: 2.4rem;
+  font-weight: 700;
+  line-height: 1;
+}
+
+.factValue small {
+  margin-left: 0.25rem;
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: var(--ink-soft);
+}
+
+.factLabel {
+  display: block;
+  margin-top: 0.45rem;
+  font-size: 0.9rem;
+  line-height: 1.45;
+  color: var(--ink-soft);
+}
+
+/* ---------------- Sections ---------------- */
+
+.section {
+  padding: 6rem 0;
+  scroll-margin-top: 68px;
+}
+
+.sectionAlt {
+  background: var(--bg-2);
+  border-block: 1px solid var(--line);
+}
+
+.sectionHead {
+  max-width: 44rem;
+  margin-bottom: 2.8rem;
+}
+
+.kicker {
+  font-family: var(--traffic-mono), monospace;
+  font-size: 0.76rem;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--accent-text);
+}
+
+.sectionTitle {
+  margin: 0.6rem 0 0.8rem;
+  font-size: clamp(1.9rem, 3.2vw, 2.7rem);
+  font-weight: 700;
+  line-height: 1.1;
+}
+
+.sectionLede {
+  margin: 0;
+  font-size: 1.05rem;
+  line-height: 1.6;
+  color: var(--ink-soft);
+}
+
+.steps {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 1.1rem;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.step,
+.role {
+  padding: 1.5rem;
+  border: 1px solid var(--line);
+  border-radius: 16px;
+  background: var(--surface);
+}
+
+.stepTop {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.stepIcon {
+  display: grid;
+  place-items: center;
+  width: 42px;
+  height: 42px;
+  border-radius: 12px;
+  background: var(--brand-soft);
+  color: var(--brand);
+}
+
+.stepNo {
+  font-family: var(--traffic-mono), monospace;
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--ink-soft);
+}
+
+.stepTitle {
+  margin: 1.1rem 0 0.45rem;
+  font-family: var(--traffic-display), system-ui, sans-serif;
+  font-size: 1.15rem;
+  font-weight: 600;
+}
+
+.stepText {
+  margin: 0;
+  font-size: 0.95rem;
+  line-height: 1.6;
+  color: var(--ink-soft);
+}
+
+.violations {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 1rem;
+}
+
+.violation {
+  padding: 1.25rem 1.25rem 1.35rem;
+  border: 1px solid var(--line);
+  border-radius: 14px;
+  background: var(--surface);
+  transition:
+    transform 0.2s ease,
+    border-color 0.2s ease;
+}
+
+.violation:hover {
+  transform: translateY(-3px);
+  border-color: var(--line-strong);
+}
+
+.violationTop {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.violationIcon {
+  display: grid;
+  place-items: center;
+  width: 38px;
+  height: 38px;
+  border-radius: 10px;
+  background: var(--amber-soft);
+  color: var(--amber-deep);
+}
+
+.code {
+  padding: 0.2rem 0.5rem;
+  border-radius: 6px;
+  background: var(--ink);
+  color: var(--bg);
+  font-family: var(--traffic-mono), monospace;
+  font-size: 0.76rem;
+  font-weight: 600;
+}
+
+.violationTitle {
+  margin: 1rem 0 0.4rem;
+  font-family: var(--traffic-display), system-ui, sans-serif;
+  font-size: 1.05rem;
+  font-weight: 600;
+}
+
+.violationText {
+  margin: 0;
+  font-size: 0.92rem;
+  line-height: 1.55;
+  color: var(--ink-soft);
+}
+
+/* ---------------- Owners ---------------- */
+
+.ownersGrid {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  gap: 4rem;
+  align-items: center;
+}
+
+.checks {
+  margin: 1.4rem 0 2rem;
+  padding: 0;
+  list-style: none;
+}
+
+.checks li {
+  position: relative;
+  margin-bottom: 0.9rem;
+  padding-left: 2.1rem;
+  line-height: 1.55;
+  color: var(--ink-soft);
+}
+
+.checks li::before {
+  content: '✓';
+  position: absolute;
+  left: 0;
+  top: 0.05rem;
+  display: grid;
+  place-items: center;
+  width: 1.4rem;
+  height: 1.4rem;
+  border-radius: 50%;
+  background: var(--green-soft);
+  color: var(--green);
+  font-size: 0.78rem;
+  font-weight: 700;
+}
+
+.ticket {
+  justify-self: end;
+  width: 100%;
+  max-width: 470px;
+  padding: 1.4rem;
+  border: 1px solid var(--line);
+  border-radius: 18px;
+  background: var(--surface);
+  box-shadow: 0 30px 60px -30px var(--shadow-strong);
+}
+
+.ticketHead {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 1rem;
+}
+
+.ticketKicker {
+  display: block;
+  font-family: var(--traffic-mono), monospace;
+  font-size: 0.7rem;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--accent-text);
+}
+
+.ticketCase {
+  display: block;
+  margin-top: 0.2rem;
+  font-family: var(--traffic-display), system-ui, sans-serif;
+  font-size: 1.1rem;
+  font-weight: 600;
+}
+
+.verified {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3rem;
+  padding: 0.3rem 0.6rem;
+  border-radius: 999px;
+  background: var(--green-soft);
+  color: var(--green);
+  font-size: 0.75rem;
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+.ticketPhoto {
+  position: relative;
+  height: 170px;
+  margin: 1.1rem 0;
+  border-radius: 12px;
+  background:
+    linear-gradient(
+      112deg,
+      transparent 47%,
+      rgba(255, 255, 255, 0.45) 47.4%,
+      rgba(255, 255, 255, 0.45) 48.2%,
+      transparent 48.6%
+    ),
+    linear-gradient(
+      68deg,
+      transparent 47%,
+      rgba(242, 193, 78, 0.7) 47.4%,
+      rgba(242, 193, 78, 0.7) 48.2%,
+      transparent 48.6%
+    ),
+    linear-gradient(180deg, #2a3650, #121a2a);
+}
+
+.ticketBox {
+  position: absolute;
+  left: 52%;
+  top: 34%;
+  width: 92px;
+  height: 64px;
+  border: 2px solid var(--viol);
+  border-radius: 4px;
+}
+
+.ticketBox::after {
+  content: '';
+  position: absolute;
+  inset: 9px 8px 7px;
+  border-radius: 9px;
+  background: #b9312c;
+  box-shadow: inset 0 9px 0 -2px rgba(9, 16, 28, 0.7);
+}
+
+.ticketBox span {
+  position: absolute;
+  top: -21px;
+  left: -2px;
+  padding: 1px 6px;
+  border-radius: 3px;
+  background: var(--viol);
+  color: #fff;
+  font-family: var(--traffic-mono), monospace;
+  font-size: 0.66rem;
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+.ticketPhotoNote {
+  position: absolute;
+  right: 10px;
+  bottom: 8px;
+  color: rgba(255, 255, 255, 0.75);
+  font-family: var(--traffic-mono), monospace;
+  font-size: 0.66rem;
+}
+
+.ticketRows {
+  display: grid;
+  gap: 0.55rem;
+  margin: 0;
+}
+
+.ticketRows div {
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+  padding-bottom: 0.55rem;
+  border-bottom: 1px dashed var(--line-strong);
+}
+
+.ticketRows dt {
+  font-size: 0.88rem;
+  color: var(--ink-soft);
+}
+
+.ticketRows dd {
+  margin: 0;
+  font-size: 0.9rem;
+  font-weight: 600;
+  text-align: right;
+}
+
+.plate {
+  font-family: var(--traffic-mono), monospace;
+  letter-spacing: 0.02em;
+}
+
+.ticketActions {
+  display: flex;
+  gap: 0.6rem;
+  margin-top: 1.2rem;
+  pointer-events: none;
+}
+
+.ticketActions span {
+  flex: 1;
+}
+
+/* ---------------- Roles, CTA, footer ---------------- */
+
+.roles {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 1rem;
+}
+
+.ctaWrap {
+  padding: 5rem 0;
+}
+
+.cta {
+  position: relative;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 2rem;
+  padding: 2.6rem 2.8rem 3.2rem;
+  border-radius: 22px;
+  overflow: hidden;
+  background: linear-gradient(120deg, #0f2347, #1d3f8f);
+  color: #fff;
+}
+
+.cta::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 16px;
+  height: 4px;
+  background: repeating-linear-gradient(
+    90deg,
+    rgba(245, 165, 36, 0.8) 0 36px,
+    transparent 36px 60px
+  );
+  opacity: 0.65;
+}
+
+.ctaTitle {
+  margin: 0 0 0.5rem;
+  font-size: clamp(1.7rem, 3vw, 2.3rem);
+  font-weight: 700;
+}
+
+.ctaText {
+  margin: 0;
+  color: rgba(255, 255, 255, 0.8);
+}
+
+.footer {
+  padding: 2rem 0 2.4rem;
+  border-top: 1px solid var(--line);
+}
+
+.footerInner {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem 2rem;
+}
+
+.footerNote {
+  font-size: 0.9rem;
+  color: var(--ink-soft);
+}
+
+.footerLinks {
+  display: flex;
+  gap: 1.2rem;
+}
+
+.footerLinks a {
+  color: var(--ink-soft);
+  font-size: 0.9rem;
+  text-decoration: none;
+}
+
+.footerLinks a:hover {
+  color: var(--ink);
+}
+
+/* ---------------- Responsive ---------------- */
+
+@media (max-width: 1040px) {
+  .heroGrid,
+  .ownersGrid {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .steps,
+  .violations {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .ticket {
+    justify-self: start;
+  }
+}
+
+@media (max-width: 900px) {
+  .navLinks {
+    display: none;
+  }
+
+  .navActions {
+    margin-left: auto;
+  }
+
+  .factsGrid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .roles {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+
+@media (max-width: 600px) {
+  .shell {
+    width: calc(100% - 2rem);
+  }
+
+  .navCta,
+  .hudRight,
+  .legend {
+    display: none;
+  }
+
+  .hero {
+    padding: 3rem 0 3.5rem;
+  }
+
+  .cases {
+    position: relative;
+    right: auto;
+    bottom: auto;
+    width: 100%;
+    margin-top: 0.8rem;
+  }
+
+  .steps,
+  .violations {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .section {
+    padding: 4rem 0;
+  }
+
+  .cta {
+    padding: 2rem 1.5rem 2.6rem;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .recDot {
+    animation: none;
+  }
+
+  .violation {
+    transition: none;
+  }
+}
