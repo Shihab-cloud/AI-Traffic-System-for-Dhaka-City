@@ -26,18 +26,18 @@ Browser (Next.js + MUI, :3000) ── REST ──► NestJS backend (:5001) ─�
                                           list to the backend; describes listed vehicles (/describe, local VLM)
 ```
 
-* **The scripts are reused, not rewritten.** `vision/pipelines/` holds copies of `vehicle_tracker.py`,
-  `speed_tracker.py`, `plate_reader.py` (this project) and `violation_tracker.py` + `violations/` + `surveillance/`
-  (CSE499B-Implementation, scripts only). The service calls each script's `main()`; `cv2.imshow` is redirected to
-  the browser, so a surveillance box shows exactly the window that `--no-show` would hide, and Stop makes
-  `cv2.waitKey` return `q`. Changes to the copies are marked `[web]`: argument lists / hooks, live-camera reading,
-  and over-speed events in `speed_tracker.py` (limit + margin for 1 s and average over the limit).
-  The CSE499B copies were brought up to the team's version of 2026-10-27: zones follow the picture when the camera
-  moves (`surveillance/camera_motion.py`; enforcement pauses if the view is lost), a box whose bottom is hidden behind
-  a nearer vehicle no longer gets a wrong position, speeds come from a least-squares fit over the last second,
-  standing-vehicle rules use far-end positions to decide who passed / who heads a queue and keep a stand across a
-  tracker ID change, and automatically calibrated zones get a wider speed margin. His tests (`tests/`, 107) pass on
-  the copies except the 2 for his own dashboard database, which the portal does not use.
+* **The pipelines are command-line scripts that the service runs.** `vision/pipelines/` holds
+  `vehicle_tracker.py` (detection and tracking), `speed_tracker.py` (speed), `plate_reader.py` (plates) and
+  `violation_tracker.py` with `violations/` and `surveillance/` (the violation rules); each also runs on its own from
+  the command line. The service calls each script's `main()`; `cv2.imshow` is redirected to the browser, so a
+  surveillance box shows exactly the window that `--no-show` would hide, and Stop makes `cv2.waitKey` return `q`.
+  Changes for the web system are marked `[web]`: argument lists / hooks, live-camera reading, and over-speed events
+  in `speed_tracker.py` (limit + margin for 1 s and average over the limit).
+  In the violation pipeline, zones follow the picture when the camera moves (`surveillance/camera_motion.py`;
+  enforcement pauses if the view is lost), a box whose bottom is hidden behind a nearer vehicle does not give a
+  wrong position, speeds come from a least-squares fit over the last second, standing-vehicle rules use far-end
+  positions to decide who passed / who heads a queue and keep a stand across a tracker ID change, and automatically
+  calibrated zones get a wider speed margin.
 * **Evidence**: each violation uploads the scene (vehicle boxed, path drawn), a close-up and, when a plate was found,
   the plate crop and a "Vehicle and plate" image (the vehicle with its plate boxed, the plate enlarged, the read).
   **Video clip** (2026-10-28): 15 s of the source video (12 s before, 3 s after), the vehicle boxed in red, a clock
@@ -198,10 +198,10 @@ With 8 GB RAM, close browser tabs you do not need while the vision service runs.
 4. In the portal: **Admin > User Management** create officers and give them the `TRAFFIC_OFFICER` role. Vehicle
    owners register themselves (sign-up) with the email that is in the vehicle registry.
 5. **Zones**: the demo camera *Kakoli overpass (KAK-01)* has the road zones of `speed_zones.json` (speed) and the
-   CSE499B team's areas for this view (`CSE499B-Implimentation/violation_zones.json`: both no-parking kerbs, the
-   side-road junction and the bus stop after it, one-way directions). For a new camera, or to change zones, under the
+   violation areas for this view (both no-parking kerbs, the side-road junction and the bus stop after it, one-way
+   directions). For a new camera, or to change zones, under the
    speed and other-violations boxes (admins only, as are the boxes' Log and Recent runs: see below):
-   * **Auto zones** (automatic, other-violations box only): the CSE499B auto-zone code (`vision/pipelines/surveillance/autozone.py`) watches the
+   * **Auto zones** (automatic, other-violations box only): `vision/pipelines/surveillance/autozone.py` watches the
      selected video for 1.5-7 minutes (a short clip to its end) and proposes the zones: each carriageway with its
      size and direction of travel, no-parking kerbs, junctions, bus stops just after a junction, signal queues and
      U-turn openings. Sizes are estimated by calibrating the camera on vehicle sizes (the report states how
@@ -216,16 +216,16 @@ With 8 GB RAM, close browser tabs you do not need while the vision service runs.
    (far-left, far-right, near-right, near-left) and type its measured width and length (speed box: required; other
    violations: optional, see "Road zones without a size" below); then select it to set its
    allowed direction, banned classes and **+ Left edge / + Right edge** no-parking kerbs (3 m strips computed from the
-   zone, as in the CSE499B editor); add intersections, bus stops and solid lane lines. **Import zone file** reads a
-   zone JSON (e.g. the team's `violation_zones.json`). After an other-violations run, each road zone shows the traffic
-   direction seen in the video with an **Apply** button (the CSE499B pipeline's direction learning).
+   zone); add intersections, bus stops and solid lane lines. **Import zone file** reads a zone JSON file (the
+   format `violation_tracker.py --zones` reads). After an other-violations run, each road zone shows the traffic
+   direction seen in the video with an **Apply** button (the direction the pipeline learned).
    * Editing (automatic or drawn zones): select a shape, drag its white corners or the shape itself, **Undo** reverts.
      Typing a real width or length on an automatic road zone makes it a measured zone (the speed box then uses it).
      A drag updates the editor at most once per screen frame and reaches the dialog on release (moving every
      update through the whole dialog made React stop with "Maximum update depth exceeded" on a fast mouse).
    * Road zones without a size (other violations only): the rules need metres, but not speed precision, so the size
      may be left empty. When the box starts, each such zone is sized from a camera model
-     (`vision/service/calibration.py`, CSE499B's autozone calibration): the one saved with the camera's Auto zones,
+     (`vision/service/calibration.py`, the same camera calibration as Auto zones): the one saved with the camera's Auto zones,
      else the vision service's cached calibration of that camera (`vision/data/calibrations/<camera id>.json`), else
      the box first watches ~30 s of the run's video (~1 min of processing) and calibrates, then caches the model.
      The log shows the estimated sizes. Test clip: Right side 10.0 x 92.1 m (measured 10.5 x 90), left side
@@ -270,7 +270,7 @@ once or more in about 7 minutes (RTX 2050, ~10 FPS with the camera-movement corr
 | 141.1 s | V4 wrong side | Bicycle #5514 against the traffic on the right side | real |
 
 Changes from the run before the 2026-10-27 update: CNG #341 (V7) is no longer reported: it stood in a queue, which the
-team's updated queue check now sees. Motorbike #2020 (V6) is no longer reported (its riders wear helmets). The kerb
+updated queue check now sees. Motorbike #2020 (V6) is no longer reported (its riders wear helmets). The kerb
 motorbike really waits ~20 s, but the tracker loses it for ~7 s at the bottom edge of the picture and gives it a new
 ID, so the test threshold is 7 s (was 10 s). The footbridge camera sways 8-15 px (measured on the buildings): the
 camera-movement correction keeps the zones on the road, at half the frame rate (`--no-stabilize` on the command
@@ -305,8 +305,8 @@ is the camera for that.
 | `apps/frontend/src/app/(protected)/(officer)/`, `(owner)/`, `(admin)/admin/` | the three portals |
 | `apps/frontend/src/components/traffic/` | Check pop-up, surveillance box, zone editor, payment pop-up, vehicle finder, charts |
 | `vision/server.py`, `vision/service/` | vision service: slots/runner, display redirection (MJPEG + logs), hooks (S3 + backend, retry outbox), plate collector, appearance vectors (`reid.py`) |
-| `vision/pipelines/` | the detection scripts (copies, `[web]` changes) |
-| `vision/models/` | `bd_vehicles_best.pt`, `helmet_cls.pt` (V6, from CSE499B), `plate_models/` (add BLPD's `LPD_Model.pt`, see "Run it") |
+| `vision/pipelines/` | the detection, speed, plate and violation scripts (`[web]` marks the web system's changes) |
+| `vision/models/` | `bd_vehicles_best.pt`, `helmet_cls.pt` (V6 helmet classifier), `plate_models/` (add BLPD's `LPD_Model.pt`, see "Run it") |
 | `infra/` | start/stop of the local services, the local S3 key pair (development only), replica-set + bucket init |
 
 Roles and permissions: `TRAFFIC_OFFICER` (rank 10) is seeded with `TRAFFIC:OFFICER, READ:VIOLATION, ISSUE:TICKET,
@@ -335,10 +335,10 @@ OPERATE:SURVEILLANCE, TRACK:VEHICLE, DECIDE:REVIEW, READ:REPORT`; admins get eve
 * Plate reads on the Dhaka footage are rarely "confirmed" (small, motion-blurred plates; confirmed needs a 50 px
   plate): officers type plates. The speed box reads only its violators' plates; the passed-vehicle list (and with it
   tracking by plate) covers the cameras the other-violations box has run on.
-* The web system saves no whole annotated video: the script copies in `vision/pipelines/` have no `--save`, and their
-  command-line `violation_tracker.py` writes no clip per violation (2026-10-28). The 15 s violation clips are made by
-  the vision service instead, from recorded videos only (a live camera's past frames are gone). The boxes' live view
-  is a stream, not a file. The project's original scripts (not in this repository) still have `--save`.
+* The web system saves no whole annotated video: the scripts in `vision/pipelines/` have no `--save`, and
+  `violation_tracker.py` writes no clip per violation. The 15 s violation clips are made by the vision service
+  instead, from recorded videos only (a live camera's past frames are gone). The boxes' live view is a stream, not a
+  file.
 * Automatic zones are a starting point, not a measurement: on the Kakoli test clip they found both carriageways
   with the right directions and the kerbs (no junction or bus stop: the clip has none in view), but the camera's lens
   could only be estimated loosely (sizes about +-59%), so the speed box does not use automatic zones at all:
@@ -348,8 +348,8 @@ OPERATE:SURVEILLANCE, TRACK:VEHICLE, DECIDE:REVIEW, READ:REPORT`; admins get eve
   only where its zones exist (the box shows which are off).
   A camera's zone config may carry `rules` settings that replace the engine defaults (e.g.
   `{"road_blocking": {"dwell_sec": 30}}`); the box lists them.
-* V6 (helmet) uses the CSE499B helmet classifier `vision/models/helmet_cls.pt` (copied from its `models/`; one crop
-  per motorbike -> P(someone on it is bare-headed)). On this camera it is the weak link: it gives P 0.9-1.0 to many
+* V6 (helmet) uses the helmet classifier `vision/models/helmet_cls.pt` (one crop per motorbike -> P(someone on it
+  is bare-headed)). On this camera it is the weak link: it gives P 0.9-1.0 to many
   riders in plainly visible helmets. Checked 2026-10-28 on every motorbike of Part-1 and three Part-2 stretches
   (reported tracks labelled by eye): with the original settings Part-1 (18 min) gave 85 cases, 48 of them clearly
   helmeted and 1 clearly bare-headed. Changes in `violations/helmet.py`: only motorbikes coming toward the camera
